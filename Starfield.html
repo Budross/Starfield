@@ -1,0 +1,70 @@
+<html>
+<body style='background-color:black'>
+<canvas id="myCanvas" width="1600" height="900"></canvas>
+<script>
+let r = Math.random()*225;
+let redDivide = Math.random()*4;
+let greenDivide = Math.random()*10;
+let blueDivide = Math.random()*3;
+
+let colorCount = 0;
+let changeColor = 50;
+let color = 0;
+
+let canvas = document.getElementById('myCanvas');
+let context = canvas.getContext('2d');
+let stars=[]; // the array of stars
+
+
+
+function animate() {
+        
+        
+        if (stars.length<500&&Math.random()<.25){ // if fewer than 300 stars, a 50% chance of creating a new one
+                let star={x:0,y:0,vx:-2+Math.random()*4,vy:-2+Math.random()*4} // create a new star in the middle with random velocity
+                stars.push(star); // add the star to the array
+                }
+        
+        
+        for(let n=0;n<stars.length;n++){ // for each star
+                stars[n].x=stars[n].x+stars[n].vx; // add the velocity to the current position
+                stars[n].y=stars[n].y+stars[n].vy; // in both axies
+                
+            
+                if(stars[n].x>800||stars[n].x<-800){ // if the star is out of bounds
+                        stars[n].x=0;  // put it back in the center
+                        stars[n].y=0;
+                        
+                }
+        color=Math.floor((Math.abs(stars[n].x)+Math.abs(stars[n].y))/4);
+        
+        context.fillStyle = 'rgb('+ r/redDivide +','+ color/greenDivide +','+color/blueDivide+')'; // use the color value for the R, G and B component
+        context.beginPath();
+        context.arc(800+stars[n].x, 450+stars[n].y, Math.abs(stars[n].y/100+n/200), 0, 2 * Math.PI); // draw a circle
+        context.fill();
+        }
+        if (color >= 150 && colorCount >= changeColor){
+            context.clearRect(0,0,1600,900);
+            r = Math.random()*256;
+            redDivide = Math.random()*4;
+            blueDivide = Math.random()* 5;
+            greenDivide = Math.random()*5;
+            colorCount++;
+            changeColor += 50;
+         
+            stars = [];
+                        
+            
+        } else {
+            colorCount++;   
+        }
+        console.log(color);
+       
+        window.requestAnimationFrame(animate); // request another animation frame
+}
+ 
+
+window.requestAnimationFrame(animate); // initialize the animation
+</script>
+</body>
+</html>
